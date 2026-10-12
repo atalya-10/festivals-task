@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festivals Learning Activity - English Task</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Rubik', 'Segoe UI', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Rubik -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Rubik', sans-serif; background-color: #f8fafc; }
+        .ltr { direction: ltr; text-align: left; }
+        .rtl { direction: rtl; text-align: right; }
+        
+        /* Custom Scrollbar for Chat */
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-track { background: #efeae2; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        
+        /* WhatsApp Chat Bubble Tails */
+        .bubble-left::after {
+            content: ""; position: absolute; top: 0; left: -8px;
+            width: 0; height: 0;
+            border-top: 8px solid white; border-left: 8px solid transparent;
+        }
+        .bubble-right::after {
+            content: ""; position: absolute; top: 0; right: -8px;
+            width: 0; height: 0;
+            border-top: 8px solid #dcf8c6; border-right: 8px solid transparent;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <span class="text-3xl">🎉</span>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Festivals Learning Activity</h1>
+                    <p class="text-xs text-blue-100 hidden sm:block">משימה אינטראקטיבית באנגלית: פסטיבלים וקטעי קריאה</p>
+                </div>
+            </div>
+            
+            <button onclick="openTeacherModal()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-3 py-1.5 rounded-lg text-sm font-medium transition duration-200 flex items-center gap-2">
+                <i class="fa-solid fa-lock text-yellow-300"></i>
+                <span>אזור מורה</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-grow">
+
+        <!-- Step 1: Student Login / Registration -->
+        <div id="studentLoginSection" class="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-lg mx-auto border border-slate-100">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-2xl mb-3">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">ברוכים הבאים למשימה!</h2>
+                <p class="text-slate-500 text-sm mt-1">מלאו את הפרטים כדי להתחיל בפעילות</p>
+            </div>
+
+            <form id="startForm" onsubmit="startActivity(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">שם מלא (בעברית או באנגלית):</label>
+                    <input type="text" id="studentName" required placeholder="לדוגמה: יובל כהן" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">כיתה:</label>
+                    <select id="studentClass" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white">
+                        <option value="">בחרו כיתה...</option>
+                        <option value="ה'1">ה'1</option>
+                        <option value="ה'2">ה'2</option>
+                        <option value="ה'3">ה'3</option>
+                        <option value="ו'1">ו'1</option>
+                        <option value="ו'2">ו'2</option>
+                        <option value="ו'3">ו'3</option>
+                        <option value="אחר">אחר</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition duration-200 mt-2">
+                    להתחלת המשימה <i class="fa-solid fa-arrow-left mr-2"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 2: Main Content & Questions -->
+        <div id="activityContent" class="hidden space-y-8">
+
+            <!-- Student Info Bar -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-lg" id="avatarLetter">S</span>
+                    <div>
+                        <div class="font-bold text-slate-800" id="displayStudentName">תלמיד/ה</div>
+                        <div class="text-xs text-slate-500">כיתה: <span id="displayStudentClass">-</span></div>
+                    </div>
+                </div>
+                <div class="text-xs text-blue-800 bg-blue-100 px-3 py-1.5 rounded-full font-medium">
+                    <i class="fa-regular fa-clock ml-1"></i> משימה פעילה
+                </div>
+            </div>
+
+            <!-- Reading Section 1: WhatsApp Chat -->
+            <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 text-white px-5 py-3 flex items-center justify-between">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <i class="fa-brands fa-whatsapp text-green-400 text-2xl"></i>
+                        <div>
+                            <h3 class="font-bold">Part 1: Text Message Conversation</h3>
+                            <p class="text-xs text-slate-300">Read the chat between Dave and Mark</p>
+                        </div>
+                    </div>
+                    <span class="bg-slate-700 text-xs px-2.5 py-1 rounded-full text-slate-200">Reading 1</span>
+                </div>
+
+                <div class="p-4 md:p-6 bg-[#efeae2] ltr relative min-h-[360px] chat-scroll overflow-y-auto">
+                    <div class="max-w-lg mx-auto space-y-4 relative z-10 font-sans">
+                        
+                        <!-- Dave Message 1 -->
+                        <div class="flex flex-col items-start">
+                            <div class="bg-white rounded-lg p-3 max-w-[85%] shadow relative bubble-left">
+                                <p class="text-xs font-bold text-emerald-600 mb-0.5">Dave</p>
+                                <p class="text-sm text-slate-800">Hi, Mark. How is the festival? Share some pictures!</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-1">10:14 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Mark Message 1 -->
+                        <div class="flex flex-col items-end">
+                            <div class="bg-[#dcf8c6] rounded-lg p-3 max-w-[85%] shadow relative bubble-right">
+                                <p class="text-xs font-bold text-sky-700 mb-0.5">Mark</p>
+                                <p class="text-sm text-slate-800">Hi, Dave! The festival is amazing! 🤪 One of the best movies was about a group of musicians just before their first big concert. I'm crazy about concerts.</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-1">10:16 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Dave Message 2 -->
+                        <div class="flex flex-col items-start">
+                            <div class="bg-white rounded-lg p-3 max-w-[85%] shadow relative bubble-left">
+                                <p class="text-xs font-bold text-emerald-600 mb-0.5">Dave</p>
+                                <p class="text-sm text-slate-800">You sound so excited. Are there any other good films?</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-1">10:17 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Mark Message 2 -->
+                        <div class="flex flex-col items-end">
+                            <div class="bg-[#dcf8c6] rounded-lg p-3 max-w-[85%] shadow relative bubble-right">
+                                <p class="text-xs font-bold text-sky-700 mb-0.5">Mark</p>
+                                <p class="text-sm text-slate-800">There were so many! One was about two people who tried to build a farm and grow strawberries in the desert. It took them seven years, but they finally managed to do it!</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-1">10:19 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Dave Message 3 -->
+                        <div class="flex flex-col items-start">
+                            <div class="bg-white rounded-lg p-3 max-w-[85%] shadow relative bubble-left">
+                                <p class="text-xs font-bold text-emerald-600 mb-0.5">Dave</p>
+                                <p class="text-sm text-slate-800">Okay, Mark. I'll ask my parents if they're available to take me this weekend. I hope to see you there!</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-1">10:21 AM</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reading Section 2: Festivals Cards -->
+            <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 text-white px-5 py-3 flex items-center justify-between">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <i class="fa-solid fa-earth-americas text-amber-400 text-2xl"></i>
+                        <div>
+                            <h3 class="font-bold">Part 2: Festival Advertisements</h3>
+                            <p class="text-xs text-slate-300">Read about three different festivals around the world</p>
+                        </div>
+                    </div>
+                    <span class="bg-slate-700 text-xs px-2.5 py-1 rounded-full text-slate-200">Reading 2</span>
+                </div>
+
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 ltr">
+                    
+                    <!-- Festival 1 -->
+                    <div class="bg-orange-50 border-2 border-orange-200 rounded-xl p-5 hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded">1</span>
+                            <span class="text-2xl" title="Italy">🇮🇹</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-orange-900 mb-1">The Eurochocolate Festival</h4>
+                        <p class="text-xs text-orange-700 font-semibold mb-3">Italy</p>
+                        <p class="text-xs text-slate-700 mb-3 font-medium italic">Come to the international Eurochocolate Festival to celebrate your love of chocolate!</p>
+                        <ul class="text-xs space-y-2 text-slate-700">
+                            <li class="flex items-start gap-1.5"><span class="text-orange-500">•</span> Visit the town of Perugia, and see an amazing festival.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-orange-500">•</span> Enjoy a variety of events and activities, including chocolate sculpture competitions.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-orange-500">•</span> Taste different kinds of delicious chocolate.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-orange-500">•</span> Take a tour of the famous Perugia Chocolate Factory and Museum.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Festival 2 -->
+                    <div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-5 hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-emerald-600 text-white text-xs font-bold px-2 py-0.5 rounded">2</span>
+                            <span class="text-2xl" title="Thailand">🇹🇭</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-emerald-900 mb-1">The Monkey Festival</h4>
+                        <p class="text-xs text-emerald-700 font-semibold mb-3">Thailand</p>
+                        <p class="text-xs text-slate-700 mb-3 font-medium italic">Don't miss this amazing cultural event!</p>
+                        <ul class="text-xs space-y-2 text-slate-700">
+                            <li class="flex items-start gap-1.5"><span class="text-emerald-600">•</span> Located in the beautiful city of Lopburi.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-emerald-600">•</span> People dress up as monkeys and dance.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-emerald-600">•</span> Early in the morning, organizers put lots of fruit on long tables.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-emerald-600">•</span> Thousands of monkeys jump on the tables and eat the fruit!</li>
+                        </ul>
+                    </div>
+
+                    <!-- Festival 3 -->
+                    <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-5 hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded">3</span>
+                            <span class="text-2xl" title="Israel">🇮🇱</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-purple-900 mb-1">The Haifa Film Festival</h4>
+                        <p class="text-xs text-purple-700 font-semibold mb-3">Israel</p>
+                        <p class="text-xs text-slate-700 mb-3 font-medium italic">Do you like drama? Do you prefer comedy? You can combine both at the Haifa Film Festival!</p>
+                        <ul class="text-xs space-y-2 text-slate-700">
+                            <li class="flex items-start gap-1.5"><span class="text-purple-600">•</span> See the best films, like comedies, dramas and musicals.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-purple-600">•</span> Meet the people who make the films.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-purple-600">•</span> Learn about people and places from around the world.</li>
+                            <li class="flex items-start gap-1.5"><span class="text-purple-600">•</span> Go on a tour of Haifa, alone or with a tour guide.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Interactive Questions Section -->
+            <form id="quizForm" onsubmit="submitQuiz(event)" class="space-y-8">
+
+                <!-- Task A: Identification & Evidence -->
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                    <div class="flex items-center gap-3 mb-4 pb-2 border-b border-slate-100">
+                        <span class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">A</span>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Task A: Which festival did Mark go to?</h3>
+                            <p class="text-xs text-slate-500">איזה פסטיבל מבוסס על קטע הקריאה בצ'אט?</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 ltr">
+                        <p class="font-medium text-slate-800">1. Which festival did Mark go to?</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <label class="border-2 border-slate-200 hover:border-indigo-400 rounded-xl p-3 flex items-center gap-3 cursor-pointer transition">
+                                <input type="radio" name="taskA_choice" value="eurochocolate" required class="text-indigo-600 focus:ring-indigo-500">
+                                <span>The Eurochocolate Festival</span>
+                            </label>
+                            <label class="border-2 border-slate-200 hover:border-indigo-400 rounded-xl p-3 flex items-center gap-3 cursor-pointer transition">
+                                <input type="radio" name="taskA_choice" value="monkey" class="text-indigo-600 focus:ring-indigo-500">
+                                <span>The Monkey Festival</span>
+                            </label>
+                            <label class="border-2 border-slate-200 hover:border-indigo-400 rounded-xl p-3 flex items-center gap-3 cursor-pointer transition">
+                                <input type="radio" name="taskA_choice" value="haifa" class="text-indigo-600 focus:ring-indigo-500">
+                                <span>The Haifa Film Festival</span>
+                            </label>
+                        </div>
+
+                        <div class="mt-4 rtl">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">2. How do you know? (Copy the hint or explain in English/Hebrew):</label>
+                            <p class="text-xs text-slate-500 mb-2">כיצד אתם יודעים? כתבו את הראיה מתוך הצ'אט (למשל: הוא מדבר על סרטים / movies/films)</p>
+                            <input type="text" id="taskA_explanation" required placeholder="Write your explanation here..." class="w-full px-4 py-2 border border-slate-300 rounded-xl ltr focus:ring-2 focus:ring-indigo-500 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task B: Chart Matrix -->
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                    <div class="flex items-center gap-3 mb-4 pb-2 border-b border-slate-100">
+                        <span class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">B</span>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Task B: Festival Chart Matrix</h3>
+                            <p class="text-xs text-slate-500">סמנו בטבלה באיזה פסטיבל/ים ניתן לבצע כל פעולה (ניתן לבחור יותר מאפשרות אחת לפי הצורך)</p>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto ltr">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 font-bold">
+                                    <th class="p-3 border">At which festival/s can you ... ?</th>
+                                    <th class="p-3 border text-center w-32">The Eurochocolate Festival</th>
+                                    <th class="p-3 border text-center w-32">The Monkey Festival</th>
+                                    <th class="p-3 border text-center w-32">The Haifa Film Festival</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y border">
+                                <tr>
+                                    <td class="p-3 border font-medium">1. watch lots of movies</td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b1" value="euro" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b1" value="monkey" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b1" value="haifa" class="w-4 h-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-medium">2. eat something delicious</td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b2" value="euro" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b2" value="monkey" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b2" value="haifa" class="w-4 h-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-medium">3. dance in the street</td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b3" value="euro" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b3" value="monkey" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b3" value="haifa" class="w-4 h-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-medium">4. go on a tour</td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b4" value="euro" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b4" value="monkey" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b4" value="haifa" class="w-4 h-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-medium">5. see lots of monkeys</td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b5" value="euro" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b5" value="monkey" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b5" value="haifa" class="w-4 h-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-medium">6. watch a competition</td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b6" value="euro" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b6" value="monkey" class="w-4 h-4"></td>
+                                    <td class="p-3 border text-center"><input type="checkbox" name="b6" value="haifa" class="w-4 h-4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Task C: Comprehension Questions from Chat -->
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                    <div class="flex items-center gap-3 mb-4 pb-2 border-b border-slate-100">
+                        <span class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">C</span>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Task C: Chat Comprehension</h3>
+                            <p class="text-xs text-slate-500">ענו על השאלות על פי ה-WhatsApp Chat בין דייב למארק</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-5 ltr">
+                        
+                        <div>
+                            <p class="font-medium text-slate-800 mb-2">1. What was one movie about? (Choose the correct answer)</p>
+                            <div class="space-y-2">
+                                <label class="block p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm">
+                                    <input type="radio" name="c1" value="monkeys" required class="mr-2"> A group of monkeys in Thailand.
+                                </label>
+                                <label class="block p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm">
+                                    <input type="radio" name="c1" value="musicians" class="mr-2"> A group of musicians just before their first big concert.
+                                </label>
+                                <label class="block p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm">
+                                    <input type="radio" name="c1" value="chocolate" class="mr-2"> Making chocolate in Italy.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="font-medium text-slate-800 mb-2">2. What did the two people try to grow in the desert?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm text-center">
+                                    <input type="radio" name="c2" value="apples" required> Apples
+                                </label>
+                                <label class="p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm text-center">
+                                    <input type="radio" name="c2" value="strawberries"> Strawberries 🍓
+                                </label>
+                                <label class="p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm text-center">
+                                    <input type="radio" name="c2" value="bananas"> Bananas
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="font-medium text-slate-800 mb-2">3. How many years did it take them to build the farm?</p>
+                            <select id="c3_select" required class="w-full sm:w-1/2 p-2.5 border border-slate-300 rounded-lg text-sm bg-white outline-none">
+                                <option value="">Choose answer...</option>
+                                <option value="five">Five years</option>
+                                <option value="seven">Seven years</option>
+                                <option value="ten">Ten years</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <p class="font-medium text-slate-800 mb-2">4. Who will Dave ask to take him to the festival?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm text-center">
+                                    <input type="radio" name="c4" value="friends" required> His friends
+                                </label>
+                                <label class="p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm text-center">
+                                    <input type="radio" name="c4" value="teacher"> His teacher
+                                </label>
+                                <label class="p-2.5 border rounded-lg hover:bg-slate-50 cursor-pointer text-sm text-center">
+                                    <input type="radio" name="c4" value="parents"> His parents 👨‍👩‍👦
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center pt-4">
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg px-10 py-3.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-paper-plane ml-2"></i> הגשת המשימה וחישוב ציון
+                    </button>
+                </div>
+            </form>
+
+            <!-- Results Display Section -->
+            <div id="resultsSection" class="hidden bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-8 text-center space-y-6">
+                <div id="resultIcon" class="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl">
+                    🏆
+                </div>
+                
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-800" id="resultScoreText">ציון: 100</h2>
+                    <p class="text-slate-600 text-base mt-2" id="resultFeedback">כל הכבוד! עבודה מצוינת!</p>
+                </div>
+
+                <!-- Score Breakdown -->
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 max-w-lg mx-auto text-right space-y-2 text-sm">
+                    <div class="font-bold border-b pb-2 mb-2">פירוט ציון:</div>
+                    <div class="flex justify-between"><span>משימה A (זיהוי הפסטיבל והסבר):</span><span class="font-semibold" id="scoreA">0/20</span></div>
+                    <div class="flex justify-between"><span>משימה B (טבלת מאפייני הפסטיבלים):</span><span class="font-semibold" id="scoreB">0/48</span></div>
+                    <div class="flex justify-between"><span>משימה C (שאלות הבנה על הצ'אט):</span><span class="font-semibold" id="scoreC">0/32</span></div>
+                </div>
+
+                <div class="p-4 bg-emerald-50 text-emerald-800 rounded-xl text-xs max-w-lg mx-auto border border-emerald-200">
+                    <i class="fa-solid fa-circle-check ml-1 text-emerald-600"></i> תשובותיך נשמרו בהצלחה במערכת ויופיעו בדוח המורה.
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="window.location.reload()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition text-sm">
+                        <i class="fa-solid fa-rotate-right ml-1"></i> התחל מחדש
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Teacher Portal Modal -->
+    <div id="teacherModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-yellow-400 text-xl"></i>
+                    <h3 class="font-bold text-lg">אזור מורה - ניהול וצפייה בתוצאות</h3>
+                </div>
+                <button onclick="closeTeacherModal()" class="text-slate-400 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Password Lock Screen -->
+            <div id="teacherAuth" class="p-8 text-center max-w-md mx-auto my-auto w-full">
+                <i class="fa-solid fa-lock text-4xl text-slate-400 mb-4"></i>
+                <h4 class="text-xl font-bold text-slate-800 mb-2">אזור זה מוגן בסיסמה</h4>
+                <p class="text-slate-500 text-sm mb-4">הכניסו קוד מורה כדי לצפות בנתוני התלמידים</p>
+                
+                <form onsubmit="checkTeacherCode(event)" class="space-y-3">
+                    <input type="password" id="teacherCodeInput" placeholder="הכנס קוד (555)..." class="w-full text-center tracking-widest text-lg px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <p id="teacherAuthError" class="text-rose-500 text-xs hidden">קוד שגוי. נסו שוב.</p>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition">
+                        כניסה לאזור המורה
+                    </button>
+                </form>
+            </div>
+
+            <!-- Dashboard Screen (After Unlock) -->
+            <div id="teacherDashboard" class="p-6 overflow-y-auto flex-grow hidden space-y-4">
+                
+                <!-- Action Bar -->
+                <div class="flex flex-wrap justify-between items-center gap-3 bg-slate-50 p-4 rounded-xl border">
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="teacherSearch" oninput="filterTeacherTable()" placeholder="חפש לפי שם או כיתה..." class="px-3 py-1.5 border rounded-lg text-sm w-48 sm:w-64 outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="flex gap-2 text-xs">
+                        <button onclick="addDemoData()" class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold px-3 py-2 rounded-lg transition">
+                            <i class="fa-solid fa-plus ml-1"></i> הוסף נתוני מדגם
+                        </button>
+                        <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-2 rounded-lg transition">
+                            <i class="fa-solid fa-file-excel ml-1"></i> ייצוא ל-CSV
+                        </button>
+                        <button onclick="clearAllData()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold px-3 py-2 rounded-lg transition">
+                            <i class="fa-solid fa-trash ml-1"></i> נקה הכל
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-100 text-slate-700 font-bold border-b">
+                            <tr>
+                                <th class="p-3">#</th>
+                                <th class="p-3">שם התלמיד/ה</th>
+                                <th class="p-3">כיתה</th>
+                                <th class="p-3">ציון</th>
+                                <th class="p-3">תאריך ושעה</th>
+                                <th class="p-3 text-center">פעולות</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherTableBody" class="divide-y">
+                            <!-- Rows loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State -->
+                <div id="noDataMessage" class="text-center py-12 text-slate-400 hidden">
+                    <i class="fa-regular fa-folder-open text-4xl mb-2"></i>
+                    <p>עדיין אין הגשות של תלמידים</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Student Detail Breakdown Modal -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h4 class="font-bold text-lg text-slate-800" id="detailStudentName">פירוט תשובות תלמיד</h4>
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div id="detailContent" class="text-sm space-y-3 ltr text-left">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <div class="pt-2 text-right">
+                <button onclick="closeDetailModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs px-4 py-2 rounded-lg">סגור</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-100 border-t border-slate-200 text-center py-4 text-xs text-slate-500 mt-12">
+        <p>דף לימוד אינטראקטיבי באנגלית • מבוסס על נושא הפסטיבלים</p>
+    </footer>
+
+    <script>
+        let currentStudent = { name: '', class: '' };
+
+        function startActivity(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value.trim();
+            const cls = document.getElementById('studentClass').value;
+
+            if (!name || !cls) return;
+
+            currentStudent = { name, class: cls };
+            
+            document.getElementById('displayStudentName').innerText = name;
+            document.getElementById('displayStudentClass').innerText = cls;
+            document.getElementById('avatarLetter').innerText = name.charAt(0).toUpperCase();
+
+            document.getElementById('studentLoginSection').classList.add('hidden');
+            document.getElementById('activityContent').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function submitQuiz(e) {
+            e.preventDefault();
+
+            let scoreA = 0;
+            let scoreB = 0;
+            let scoreC = 0;
+
+            // Task A Grading
+            const taskA_choice = document.querySelector('input[name="taskA_choice"]:checked')?.value;
+            const taskA_exp = document.getElementById('taskA_explanation').value.trim();
+            
+            if (taskA_choice === 'haifa') scoreA += 10;
+            if (taskA_exp.length > 2) scoreA += 10;
+
+            // Task B Grading
+            const correctB = {
+                b1: ['haifa'],
+                b2: ['euro'],
+                b3: ['monkey'],
+                b4: ['euro', 'haifa'],
+                b5: ['monkey'],
+                b6: ['euro']
+            };
+
+            for (let i = 1; i <= 6; i++) {
+                const checkedValues = Array.from(document.querySelectorAll(`input[name="b${i}"]:checked`)).map(c => c.value);
+                const targetValues = correctB[`b${i}`];
+                
+                const isExact = checkedValues.length === targetValues.length && 
+                                checkedValues.every(val => targetValues.includes(val));
+                
+                if (isExact) scoreB += 8;
+            }
+
+            // Task C Grading
+            const c1 = document.querySelector('input[name="c1"]:checked')?.value;
+            const c2 = document.querySelector('input[name="c2"]:checked')?.value;
+            const c3 = document.getElementById('c3_select').value;
+            const c4 = document.querySelector('input[name="c4"]:checked')?.value;
+
+            if (c1 === 'musicians') scoreC += 8;
+            if (c2 === 'strawberries') scoreC += 8;
+            if (c3 === 'seven') scoreC += 8;
+            if (c4 === 'parents') scoreC += 8;
+
+            const totalScore = scoreA + scoreB + scoreC;
+
+            document.getElementById('scoreA').innerText = `${scoreA}/20`;
+            document.getElementById('scoreB').innerText = `${scoreB}/48`;
+            document.getElementById('scoreC').innerText = `${scoreC}/32`;
+            document.getElementById('resultScoreText').innerText = `ציון סופי: ${totalScore}`;
+
+            const feedbackEl = document.getElementById('resultFeedback');
+            const iconEl = document.getElementById('resultIcon');
+
+            if (totalScore >= 90) {
+                feedbackEl.innerText = "כל הכבוד! תוצאה מצוינת! שליטה מעולה בחומר! 🌟";
+                iconEl.innerText = "🏆";
+                iconEl.className = "w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl bg-emerald-100 text-emerald-600";
+            } else if (totalScore >= 70) {
+                feedbackEl.innerText = "עבודה טובה מאוד! קראת והבנת את הרוב המוחלט! 👍";
+                iconEl.innerText = "⭐";
+                iconEl.className = "w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl bg-blue-100 text-blue-600";
+            } else {
+                feedbackEl.innerText = "כל הכבוד על המאמץ! מומלץ לעבור שוב על הקטעים ולנסות לפרק את השאלות. 💪";
+                iconEl.innerText = "📚";
+                iconEl.className = "w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl bg-amber-100 text-amber-600";
+            }
+
+            const submissionData = {
+                id: Date.now(),
+                name: currentStudent.name,
+                class: currentStudent.class,
+                score: totalScore,
+                date: new Date().toLocaleString('he-IL'),
+                details: {
+                    taskA_choice,
+                    taskA_exp,
+                    scoresBreakdown: { scoreA, scoreB, scoreC }
+                }
+            };
+
+            saveSubmission(submissionData);
+
+            document.getElementById('quizForm').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getSubmissions() {
+            const data = localStorage.getItem('festivals_submissions');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveSubmission(submission) {
+            const submissions = getSubmissions();
+            submissions.push(submission);
+            localStorage.setItem('festivals_submissions', JSON.stringify(submissions));
+        }
+
+        function openTeacherModal() {
+            document.getElementById('teacherModal').classList.remove('hidden');
+        }
+
+        function closeTeacherModal() {
+            document.getElementById('teacherModal').classList.add('hidden');
+        }
+
+        function checkTeacherCode(e) {
+            e.preventDefault();
+            const code = document.getElementById('teacherCodeInput').value;
+            const errEl = document.getElementById('teacherAuthError');
+
+            if (code === '555') {
+                errEl.classList.add('hidden');
+                document.getElementById('teacherAuth').classList.add('hidden');
+                document.getElementById('teacherDashboard').classList.remove('hidden');
+                renderTeacherTable();
+            } else {
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        function renderTeacherTable(filterText = '') {
+            const submissions = getSubmissions();
+            const tbody = document.getElementById('teacherTableBody');
+            const noData = document.getElementById('noDataMessage');
+            tbody.innerHTML = '';
+
+            const filtered = submissions.filter(s => 
+                s.name.toLowerCase().includes(filterText.toLowerCase()) || 
+                s.class.toLowerCase().includes(filterText.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                noData.classList.remove('hidden');
+                return;
+            } else {
+                noData.classList.add('hidden');
+            }
+
+            filtered.forEach((sub, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition border-b';
+                
+                let scoreBadgeClass = 'bg-emerald-100 text-emerald-800';
+                if (sub.score < 70) scoreBadgeClass = 'bg-rose-100 text-rose-800';
+                else if (sub.score < 85) scoreBadgeClass = 'bg-amber-100 text-amber-800';
+
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-500">${idx + 1}</td>
+                    <td class="p-3 font-bold text-slate-800">${escapeHtml(sub.name)}</td>
+                    <td class="p-3">${escapeHtml(sub.class)}</td>
+                    <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${scoreBadgeClass}">${sub.score}</span></td>
+                    <td class="p-3 text-xs text-slate-500">${sub.date}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="viewStudentDetails(${sub.id})" class="text-indigo-600 hover:text-indigo-800 text-xs font-semibold underline">
+                            צפה בתשובות
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTeacherTable() {
+            const query = document.getElementById('teacherSearch').value;
+            renderTeacherTable(query);
+        }
+
+        function viewStudentDetails(id) {
+            const submissions = getSubmissions();
+            const sub = submissions.find(s => s.id === id);
+            if (!sub) return;
+
+            document.getElementById('detailStudentName').innerText = `תשובות: ${sub.name} (${sub.class})`;
+            
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div class="p-3 bg-slate-50 rounded-lg">
+                    <strong>Task A Festival Choice:</strong> ${escapeHtml(sub.details?.taskA_choice || 'N/A')}
+                </div>
+                <div class="p-3 bg-slate-50 rounded-lg">
+                    <strong>Task A Explanation:</strong> ${escapeHtml(sub.details?.taskA_exp || 'N/A')}
+                </div>
+                <div class="p-3 bg-slate-50 rounded-lg">
+                    <strong>Scores Breakdown:</strong><br>
+                    Part A: ${sub.details?.scoresBreakdown?.scoreA || 0}/20<br>
+                    Part B: ${sub.details?.scoresBreakdown?.scoreB || 0}/48<br>
+                    Part C: ${sub.details?.scoresBreakdown?.scoreC || 0}/32
+                </div>
+            `;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function addDemoData() {
+            const demoSubmissions = [
+                { id: 101, name: "איתי לוי", class: "ה'1", score: 92, date: "12/10/2026, 09:15", details: { taskA_choice: "haifa", taskA_exp: "Because Mark talked about movies and comedies" } },
+                { id: 102, name: "נועה קליין", class: "ה'2", score: 100, date: "12/10/2026, 09:30", details: { taskA_choice: "haifa", taskA_exp: "Mark mentioned films about musicians and desert farm" } },
+                { id: 103, name: "דניאל כהן", class: "ו'1", score: 68, date: "12/10/2026, 10:05", details: { taskA_choice: "monkey", taskA_exp: "I like monkeys" } }
+            ];
+
+            const current = getSubmissions();
+            localStorage.setItem('festivals_submissions', JSON.stringify([...current, ...demoSubmissions]));
+            renderTeacherTable();
+        }
+
+        function clearAllData() {
+            if (confirm("האם למחוק את כל נתוני התלמידים שנשמרו?")) {
+                localStorage.removeItem('festivals_submissions');
+                renderTeacherTable();
+            }
+        }
+
+        function exportToCSV() {
+            const submissions = getSubmissions();
+            if (submissions.length === 0) {
+                alert("אין נתונים לייצוא");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "שם התלמיד,כיתה,ציון,תאריך הגשה\n";
+
+            submissions.forEach(s => {
+                csvContent += `"${s.name}","${s.class}","${s.score}","${s.date}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "festivals_student_scores.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
